@@ -15,6 +15,7 @@ public class TestCalendarView extends Activity implements CalendarView.OnDateCha
     private View view;
     private CalendarView calendar;
     private EditText editText;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,6 @@ public class TestCalendarView extends Activity implements CalendarView.OnDateCha
         setContentView(R.layout.main);
         editText = (EditText) findViewById(R.id.et);
         editText.setOnClickListener(this);
-
     }
 
     @Override
@@ -30,17 +30,21 @@ public class TestCalendarView extends Activity implements CalendarView.OnDateCha
         view = View.inflate(TestCalendarView.this, R.layout.calendarview, null);
         calendar = (CalendarView) view.findViewById(R.id.calendarview2);
         calendar.setOnDateChangeListener(this);
-        return new AlertDialog.Builder(TestCalendarView.this)
-                .setTitle("请选择日期")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setView(view)
-                .setPositiveButton("确定",null)
-                .create();
+        if (dialog == null) {
+            dialog = new AlertDialog.Builder(TestCalendarView.this)
+                    .setTitle("选择日期")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setView(view)
+                    .setPositiveButton("确定", null)
+                    .create();
+        }
+        return dialog;
     }
 
     @Override
     public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-        editText.setText(year + "年" +( month+1)+ "月" + dayOfMonth+"日");
+        String date = year + "年" + (month + 1) + "月" + dayOfMonth + "日";
+        editText.setText(date);
     }
 
     @Override
